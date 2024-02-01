@@ -140,6 +140,7 @@ int16_t RGB888_to_RGB565(uint8_t r,uint8_t g,uint8_t b){
 }
 
 void ili9341_clear(const ili9341_config_t device, uint16_t px){
+    ili9341_address_set(device, 0,0,320,240)
     ili9341_sand_command(device, 0x2c);
     uint16_t* frame = (uint16_t *)heap_caps_malloc(32768*sizeof(uint16_t), MALLOC_CAP_DMA);
     for (size_t i = 0; i < 32768; i++){
@@ -163,6 +164,7 @@ void ili9341_clear(const ili9341_config_t device, uint16_t px){
 }
 
 void ili9341_show_frame(const ili9341_config_t device, void* frame){
+    ili9341_address_set(device, 0,0,320,240);
     ili9341_sand_command(device, 0x2c);
     gpio_set_level(device.dc_pin, 1);
     spi_transaction_t transaction;
