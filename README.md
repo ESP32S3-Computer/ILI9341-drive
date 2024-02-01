@@ -12,7 +12,7 @@ ILI9341的ESP32驱动组件，基于ESP-IDF构建系统，理论上所有ESP32�
 ### 手动导入
 将`src/ili9341Driver.c`和`include/ili9341Driver.h`复制到源代码目录, 然后在代码中`#include "ili9341Driver"`并在编译时添加`src/ili9341Driver.c`文件即可
 
-## API
+## API Reference
 > ```struct ili9341_config_t```  
 >> 用于配置ILI9341的结构体  
 >>> 公有成员 (Public Members):  
