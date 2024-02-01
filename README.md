@@ -113,6 +113,12 @@ ILI9341的ESP32驱动组件，基于ESP-IDF构建系统，理论上所有ESP32�
 >> 
 >>> 返回 (Returns): RGB565
 ---
+>`void ili9341_clear(const ili9341_config_t device, uint16_t px)`  
+>> 用于将ILI9341的屏幕设置成同一个颜色
+>>> 参数 (Parameters):  
+>>> * `device` -- ILI9341的配置结构体
+>>> * `px` -- RGR565
+---
 >`void ili9341_show_frame(const ili9341_config_t device, void* frame)`  
 >> 用于让ILI9341显示一帧图像
 >>> 参数 (Parameters):  
