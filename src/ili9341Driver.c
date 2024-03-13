@@ -136,7 +136,7 @@ void ili9341_init(const ili9341_config_t device){
 }
 
 int16_t RGB888_to_RGB565(uint8_t r,uint8_t g,uint8_t b){
-    return b << 11 | g << 5 | r;
+    return r << 11 | g << 5 | b;
 }
 
 void ili9341_clear(const ili9341_config_t device, uint16_t px){
@@ -150,13 +150,13 @@ void ili9341_clear(const ili9341_config_t device, uint16_t px){
     spi_transaction_t transaction;
     memset(&transaction, 0, sizeof(transaction));
     transaction.length = 262144;
+    transaction.rxlength = 262144;
     transaction.tx_buffer = frame;
-    gpio_set_level(device.dc_pin, 1);
     spi_device_polling_transmit(device.spi_device, &transaction);
     spi_device_polling_transmit(device.spi_device, &transaction);
     spi_device_polling_transmit(device.spi_device, &transaction);
     spi_device_polling_transmit(device.spi_device, &transaction);
-    memset(&transaction, 0, sizeof(transaction));
+    transaction.rxlength = 180224;
     transaction.length = 180224;
     transaction.tx_buffer = frame;
     spi_device_polling_transmit(device.spi_device, &transaction);
@@ -170,23 +170,17 @@ void ili9341_show_frame(const ili9341_config_t device, void* frame){
     spi_transaction_t transaction;
     memset(&transaction, 0, sizeof(transaction));
     transaction.length = 262144;
+    transaction.rxlength = 262144;
     transaction.tx_buffer = frame;
-    gpio_set_level(device.dc_pin, 1);
     spi_device_polling_transmit(device.spi_device, &transaction);
-    memset(&transaction, 0, sizeof(transaction));
-    transaction.length = 262144;
     transaction.tx_buffer = frame+32768;
     spi_device_polling_transmit(device.spi_device, &transaction);
-    memset(&transaction, 0, sizeof(transaction));
-    transaction.length = 262144;
     transaction.tx_buffer = frame+65536;
     spi_device_polling_transmit(device.spi_device, &transaction);
-    memset(&transaction, 0, sizeof(transaction));
-    transaction.length = 262144;
     transaction.tx_buffer = frame+98304;
     spi_device_polling_transmit(device.spi_device, &transaction);
-    memset(&transaction, 0, sizeof(transaction));
     transaction.length = 180224;
+    transaction.rxlength = 180224;
     transaction.tx_buffer = frame+131072;
     spi_device_polling_transmit(device.spi_device, &transaction);
     heap_caps_free(frame);
