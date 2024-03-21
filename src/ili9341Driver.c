@@ -185,3 +185,23 @@ void ili9341_show_frame(const ili9341_config_t device, void* frame){
     spi_device_polling_transmit(device.spi_device, &transaction);
     heap_caps_free(frame);
 }
+
+void ili9341_write(const ili9341_config_t device, uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2, void* data, size_t len){
+    ili9341_address_set(device, x1, y1, x2, y2);
+    ili9341_sand_command(device, 0x2c);
+    gpio_set_level(device.dc_pin, 1);
+    spi_transaction_t transaction;
+    memset(&transaction, 0, sizeof(transaction));
+    transaction.length = (len*8)%262144;
+    transaction.rxlength = (len*8)%262144;
+    transaction.tx_buffer = data;
+    spi_device_polling_transmit(device.spi_device, &transaction);
+    transaction.length = 262144;
+    transaction.rxlength = 262144;
+    transaction.tx_buffer += len%32768;
+    while (transaction.tx_buffer-data < len){
+        spi_device_polling_transmit(device.spi_device, &transaction);
+        transaction.tx_buffer += 32768;
+    }
+    
+}
